@@ -1,0 +1,48 @@
+/* Page-specific styles for the network homepage. */
+
+.tool-index {
+  padding-bottom: var(--space-8);
+}
+
+.tool-index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.tool-card:hover {
+  border-color: var(--color-amber);
+}
+
+.tool-card:active {
+  transform: scale(0.99);
+}
+
+.tool-card h3 {
+  font-size: var(--text-md);
+  color: var(--color-text-primary);
+}
+
+.tool-card p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.tool-card__cta {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-amber);
+}

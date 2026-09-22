@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wattline | Home Energy Calculators</title>
+  <meta
+    name="description"
+    content="Free calculators for home energy decisions: EV charging costs, solar payback, battery storage, and more. Enter your numbers, see real costs."
+  />
+  <link rel="canonical" href="https://wattline.example/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Wattline | Home Energy Calculators" />
+  <meta
+    property="og:description"
+    content="Free calculators for home energy decisions: EV charging costs, solar payback, battery storage, and more."
+  />
+  <meta property="og:url" content="https://wattline.example/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="/shared/tokens.css" />
+  <link rel="stylesheet" href="/shared/base.css" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div data-include="/shared/header.html"></div>
+
+  <main>
+    <section class="page-intro wrap">
+      <h1>Wattline</h1>
+      <p class="page-intro__sub">
+        Practical calculators for home energy decisions. Enter your own numbers and get a real
+        cost estimate, not a rule of thumb.
+      </p>
+    </section>
+
+    <section class="tool-index wrap" aria-labelledby="tools-heading">
+      <h2 id="tools-heading" class="sr-only">Calculators</h2>
+      <div class="tool-index-grid">
+        <a class="panel tool-card" href="/ev-charging-calculator/">
+          <h3>EV Home Charging Cost Calculator</h3>
+          <p>
+            Estimate your monthly cost to charge an EV at home, compare it to a gas car, and see
+            how much you'd save.
+          </p>
+          <span class="tool-card__cta">Open calculator</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="ad-slot" role="complementary" aria-label="Advertisement">
+        <span class="ad-slot__inner">Advertisement</span>
+      </div>
+    </div>
+  </main>
+
+  <div data-include="/shared/footer.html"></div>
+
+  <script src="/shared/include.js"></script>
+</body>
+</html>
