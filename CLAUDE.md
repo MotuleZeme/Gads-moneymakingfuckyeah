@@ -15,7 +15,30 @@ Partials (`header.html`, `footer.html`) are injected at runtime via `fetch()`
 in `shared/include.js`, which means pages must be served over `http(s)://`
 during development — `file://` will fail CORS on the fetch. Run
 `python3 -m http.server 8000` from the project root and test at
-`http://localhost:8000/<tool>/`.
+`http://localhost:8000/<tool>/`. Don't open pages by double-clicking the
+HTML file — that loads it over `file://` and breaks both the fetch includes
+and (if paths were ever made root-absolute) the stylesheet links.
+
+**Path convention — always relative, scoped to page depth.** Every asset
+reference (`<link rel="stylesheet">`, `<script src>`, `[data-include]`) must
+be a *relative* path, not root-absolute (`/shared/...`). Root-absolute paths
+only resolve correctly when the site is served from a true domain root —
+they silently 404 under `file://` and under any subpath deployment (e.g. a
+GitHub Pages project URL), which is exactly what causes a page to render
+with zero styling (default browser fonts/colors, as if no CSS loaded at
+all). Use:
+- From `/index.html` (root): `shared/tokens.css`, `shared/header.html`, etc.
+- From `/<tool>/index.html` (one level deep): `../shared/tokens.css`,
+  `../shared/header.html`, etc. Same-directory files (`style.css`,
+  `calculator.js`) stay unqualified.
+
+The one intentional exception is the nav `<a href>` targets inside
+`shared/header.html` (`/`, `/ev-charging-calculator/`) — those stay
+root-absolute because they represent real site navigation tied to the
+eventual domain-root deployment, and they resolve correctly under the
+documented local-server workflow above. If a future tool's homepage link
+looks broken, confirm you're testing via `http://localhost:8000/`, not
+`file://`.
 
 ## Directory structure
 
