@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EV Home Charging Cost Calculator | Wattline</title>
+  <meta
+    name="description"
+    content="Estimate your monthly EV home charging cost, compare it to a gas car, and see how much you'll save. Accounts for charging loss, charger level, and electricity rate."
+  />
+  <link rel="canonical" href="https://wattline.example/ev-charging-calculator/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="EV Home Charging Cost Calculator" />
+  <meta
+    property="og:description"
+    content="Estimate your monthly EV home charging cost and see how it compares to gas."
+  />
+  <meta property="og:url" content="https://wattline.example/ev-charging-calculator/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="/shared/tokens.css" />
+  <link rel="stylesheet" href="/shared/base.css" />
+  <link rel="stylesheet" href="style.css" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What's a typical EV efficiency range?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most electric vehicles fall between roughly 2.5 and 4.5 miles per kWh (about 1.5 to 2.8 km per kWh), depending on the vehicle's size, weight, and driving conditions. Smaller EVs and sedans tend to sit at the efficient end; larger SUVs and trucks sit lower. Cold weather and highway speeds both reduce efficiency."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What charging loss percentage should I use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Home charging typically loses 8% to 15% of the electricity drawn from the wall before it reaches the battery, mostly as heat during AC-to-DC conversion. 12% is a reasonable default for a Level 2 home charger. Level 1 setups and older equipment can run slightly higher."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is installing a Level 2 charger worth it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If you drive more than a short commute daily, yes. Level 1 (a standard outlet) adds only 3 to 5 miles of range per hour, which struggles to keep up with daily driving. Level 2 adds 20 to 40 miles per hour, fully replenishes overnight, and runs slightly more efficiently, which lowers your effective cost per mile."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do time-of-use electricity rates actually help?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Often, yes. Many utilities offer overnight off-peak rates that run 30% to 50% below the standard rate. Since most home charging happens overnight anyway, shifting or scheduling charging to that window can meaningfully lower your monthly cost without changing anything else about your driving."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does battery size affect my charging cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Your monthly cost depends on how far you drive and how efficiently your car uses electricity, not the size of the battery. Battery size only affects how long a full charge takes and how much range you have between charges."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate is this calculator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It's an estimate built from the inputs you provide. Your actual utility bill can differ based on tiered pricing, time-of-use rates, seasonal adjustments, and any fixed monthly charges your utility applies. Use it to compare scenarios, not as a substitute for your bill."
+          }
+        }
+      ]
+    }
+  </script>
+</head>
+<body>
+  <div data-include="/shared/header.html"></div>
+
+  <main>
+    <section class="page-intro wrap">
+      <h1>EV Home Charging Cost Calculator</h1>
+      <p class="page-intro__sub">
+        Enter your driving habits and electricity rate to estimate your monthly home charging
+        cost, and see how it compares to what you'd pay for gas.
+      </p>
+    </section>
+
+    <section class="calculator wrap" aria-labelledby="calculator-heading">
+      <h2 id="calculator-heading" class="sr-only">Charging cost calculator</h2>
+
+      <div class="calculator__grid">
+        <form class="panel calc-inputs" id="calc-form">
+          <div class="calc-inputs__unit-row">
+            <span class="calc-inputs__unit-label">Units</span>
+            <div class="unit-toggle" role="group" aria-label="Distance unit">
+              <button type="button" class="unit-toggle__option" data-unit="mi" aria-pressed="true">
+                Miles
+              </button>
+              <button type="button" class="unit-toggle__option" data-unit="km" aria-pressed="false">
+                Kilometers
+              </button>
+            </div>
+          </div>
+
+          <fieldset class="calc-inputs__group">
+            <legend>Your driving</legend>
+
+            <div class="field">
+              <label for="distance">Monthly distance driven</label>
+              <div class="field__input-row">
+                <input type="number" id="distance" name="distance" min="0" step="1" value="1000" inputmode="decimal" />
+                <span class="field__suffix" data-suffix="distance">mi</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="efficiency">Vehicle efficiency</label>
+              <div class="field__input-row">
+                <input type="number" id="efficiency" name="efficiency" min="0.1" step="0.1" value="3.5" inputmode="decimal" />
+                <span class="field__suffix" data-suffix="efficiency">mi/kWh</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="calc-inputs__group">
+            <legend>Charging setup</legend>
+
+            <div class="field">
+              <label for="rate">Electricity rate</label>
+              <div class="field__input-row">
+                <span class="field__prefix">$</span>
+                <input type="number" id="rate" name="rate" min="0" step="0.01" value="0.16" inputmode="decimal" />
+                <span class="field__suffix">/kWh</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="loss">
+                Charging loss
+                <span class="field__value-badge num" id="loss-value">12%</span>
+              </label>
+              <input type="range" id="loss" name="loss" min="0" max="30" step="1" value="12" />
+            </div>
+
+            <div class="field">
+              <label for="charger">Charger level</label>
+              <select id="charger" name="charger">
+                <option value="1.4">Level 1 (standard outlet, 1.4 kW)</option>
+                <option value="7.4" selected>Level 2 (240V, 7.4 kW)</option>
+                <option value="11.5">Level 2, high-amp (240V, 11.5 kW)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="battery">Battery size</label>
+              <div class="field__input-row">
+                <input type="number" id="battery" name="battery" min="1" step="1" value="75" inputmode="decimal" />
+                <span class="field__suffix">kWh</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="calc-inputs__group">
+            <legend>Compare to a gas car</legend>
+
+            <div class="field">
+              <label for="gas-efficiency">Gas car efficiency</label>
+              <div class="field__input-row">
+                <input type="number" id="gas-efficiency" name="gasEfficiency" min="1" step="0.1" value="30" inputmode="decimal" />
+                <span class="field__suffix" data-suffix="gasEfficiency">mpg</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="gas-price">Gas price</label>
+              <div class="field__input-row">
+                <span class="field__prefix">$</span>
+                <input type="number" id="gas-price" name="gasPrice" min="0" step="0.01" value="3.50" inputmode="decimal" />
+                <span class="field__suffix" data-suffix="gasPriceUnit">/gal</span>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        <div class="panel meter" aria-live="polite">
+          <p class="meter__label">Estimated monthly electric cost</p>
+          <p class="meter__value">
+            <span class="meter__currency">$</span><span class="num" id="out-monthly-cost">0</span>
+          </p>
+
+          <div class="meter__stats">
+            <div class="meter__stat">
+              <span class="meter__stat-label">Cost per <span data-unit-word="mi">mile</span></span>
+              <span class="meter__stat-value num" id="out-cost-per-distance">$0.00</span>
+            </div>
+            <div class="meter__stat">
+              <span class="meter__stat-label">Full charge time</span>
+              <span class="meter__stat-value num" id="out-charge-time">0 hrs</span>
+            </div>
+            <div class="meter__stat">
+              <span class="meter__stat-label">Monthly savings vs. gas</span>
+              <span class="meter__stat-value num meter__stat-value--amber" id="out-monthly-savings">$0</span>
+            </div>
+            <div class="meter__stat">
+              <span class="meter__stat-label">Annual savings vs. gas</span>
+              <span class="meter__stat-value num meter__stat-value--amber" id="out-annual-savings">$0</span>
+            </div>
+          </div>
+
+          <div class="meter__compare">
+            <p class="meter__compare-label">Monthly cost comparison</p>
+
+            <div class="compare-bar">
+              <div class="compare-bar__head">
+                <span>Electric</span>
+                <span class="num" id="out-bar-electric-value">$0</span>
+              </div>
+              <div class="compare-bar__track">
+                <div class="compare-bar__fill compare-bar__fill--amber" id="out-bar-electric" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="compare-bar">
+              <div class="compare-bar__head">
+                <span>Gas</span>
+                <span class="num" id="out-bar-gas-value">$0</span>
+              </div>
+              <div class="compare-bar__track">
+                <div class="compare-bar__fill compare-bar__fill--blue" id="out-bar-gas" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-block wrap" aria-labelledby="methodology-heading">
+      <h2 id="methodology-heading">How this calculator works</h2>
+      <p>
+        The calculator runs every input through a fixed set of steps, converting to metric
+        internally so the mile/kilometer toggle never introduces rounding drift.
+      </p>
+      <ol class="method-list">
+        <li>
+          <strong>Energy at the wheel.</strong> Monthly distance divided by your vehicle's
+          efficiency gives the kWh actually used to move the car.
+        </li>
+        <li>
+          <strong>Energy drawn from the wall.</strong> Home charging isn't 100% efficient, so
+          the energy at the wheel is divided by (1 minus your charging loss percentage) to get
+          what your meter actually measures.
+        </li>
+        <li>
+          <strong>Monthly cost.</strong> Energy from the wall multiplied by your electricity
+          rate.
+        </li>
+        <li>
+          <strong>Gas comparison cost.</strong> Calculated the same way a fuel gauge would: miles
+          divided by mpg, times price per gallon (or liters per 100 km, times price per liter).
+        </li>
+        <li>
+          <strong>Savings.</strong> The gas cost minus the electric cost, shown monthly and
+          annualized.
+        </li>
+      </ol>
+    </section>
+
+    <section class="content-block content-block--articles wrap">
+      <article class="article">
+        <h2>Tips for lowering your home charging costs</h2>
+        <ul class="article__list">
+          <li>
+            <strong>Charge on an off-peak rate.</strong> If your utility offers time-of-use
+            pricing, overnight rates are often 30% to 50% cheaper than daytime rates. Most
+            charging happens overnight anyway, so scheduling it to start after peak hours costs
+            you nothing in convenience.
+          </li>
+          <li>
+            <strong>Level 2 beats Level 1 on efficiency, not just speed.</strong> A standard
+            outlet (Level 1) is slower and typically has slightly higher conversion loss than a
+            dedicated 240V Level 2 circuit. If you're charging daily, the upgrade usually pays
+            for itself in both time and a lower cost per mile.
+          </li>
+          <li>
+            <strong>Charge to the range you need, not always to 100%.</strong> Topping off to
+            80% for daily driving instead of a full charge every night reduces the total kWh you
+            pull each month and is generally easier on the battery long-term.
+          </li>
+          <li>
+            <strong>Watch for demand charges on high-amp setups.</strong> Some utilities,
+            especially for larger homes or commercial-rate accounts, charge based on peak power
+            draw, not just total energy. A high-amp Level 2 charger pulling 11+ kW at once can
+            push your household into a higher demand tier. Check your rate plan before installing
+            one.
+          </li>
+        </ul>
+      </article>
+
+      <article class="article">
+        <h2>How to read your comparison result</h2>
+        <p>
+          The comparison bars show your estimated monthly electric cost next to what the same
+          driving would cost in a comparable gas car. A shorter electric bar means charging at
+          home is cheaper per mile for the rate and efficiency you entered, which is true for
+          the large majority of U.S. electricity rates and EVs.
+        </p>
+        <p>
+          The savings figures are a direct subtraction of gas cost minus electric cost. They
+          don't include the price difference between the vehicles themselves, maintenance,
+          insurance, or any purchase incentives, since those vary too much by situation to
+          estimate generically. Treat this result as your ongoing fuel-cost comparison, not a
+          full cost-of-ownership calculation.
+        </p>
+        <p>
+          If your result looks off, the two inputs worth double-checking first are charging loss
+          (12% is typical, but older equipment can run higher) and electricity rate (use your
+          actual per-kWh rate from a recent bill, not a national average).
+        </p>
+      </article>
+    </section>
+
+    <section class="content-block wrap" aria-labelledby="rates-heading">
+      <h2 id="rates-heading">Average residential electricity rates by state</h2>
+      <p>
+        Use these as a starting point if you don't know your exact rate. Actual rates vary by
+        utility, plan, season, and usage tier, so check a recent bill for your precise number.
+      </p>
+      <table class="data-table">
+        <caption>
+          Approximate average residential electricity rates, U.S. Energy Information
+          Administration, 2024 data. Reference only, not your exact rate.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">State</th>
+            <th scope="col">Avg. rate ($/kWh)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Louisiana</td><td class="num">$0.11</td></tr>
+          <tr><td>Washington</td><td class="num">$0.11</td></tr>
+          <tr><td>Idaho</td><td class="num">$0.11</td></tr>
+          <tr><td>Utah</td><td class="num">$0.12</td></tr>
+          <tr><td>Oklahoma</td><td class="num">$0.12</td></tr>
+          <tr><td>Texas</td><td class="num">$0.14</td></tr>
+          <tr><td>Ohio</td><td class="num">$0.14</td></tr>
+          <tr><td>Georgia</td><td class="num">$0.14</td></tr>
+          <tr><td>Illinois</td><td class="num">$0.16</td></tr>
+          <tr><td><strong>U.S. average</strong></td><td class="num"><strong>$0.17</strong></td></tr>
+          <tr><td>Michigan</td><td class="num">$0.18</td></tr>
+          <tr><td>New York</td><td class="num">$0.22</td></tr>
+          <tr><td>Massachusetts</td><td class="num">$0.28</td></tr>
+          <tr><td>California</td><td class="num">$0.31</td></tr>
+          <tr><td>Hawaii</td><td class="num">$0.41</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-block wrap" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Frequently asked questions</h2>
+      <div class="accordion" id="faq-accordion">
+        <details class="accordion-item">
+          <summary>What's a typical EV efficiency range?</summary>
+          <div class="accordion-item__body">
+            <p>
+              Most electric vehicles fall between roughly 2.5 and 4.5 miles per kWh (about 1.5 to
+              2.8 km per kWh), depending on the vehicle's size, weight, and driving conditions.
+              Smaller EVs and sedans tend to sit at the efficient end; larger SUVs and trucks sit
+              lower. Cold weather and highway speeds both reduce efficiency.
+            </p>
+          </div>
+        </details>
+
+        <details class="accordion-item">
+          <summary>What charging loss percentage should I use?</summary>
+          <div class="accordion-item__body">
+            <p>
+              Home charging typically loses 8% to 15% of the electricity drawn from the wall
+              before it reaches the battery, mostly as heat during AC-to-DC conversion. 12% is a
+              reasonable default for a Level 2 home charger. Level 1 setups and older equipment
+              can run slightly higher.
+            </p>
+          </div>
+        </details>
+
+        <details class="accordion-item">
+          <summary>Is installing a Level 2 charger worth it?</summary>
+          <div class="accordion-item__body">
+            <p>
+              If you drive more than a short commute daily, yes. Level 1 (a standard outlet)
+              adds only 3 to 5 miles of range per hour, which struggles to keep up with daily
+              driving. Level 2 adds 20 to 40 miles per hour, fully replenishes overnight, and
+              runs slightly more efficiently, which lowers your effective cost per mile.
+            </p>
+          </div>
+        </details>
+
+        <details class="accordion-item">
+          <summary>Do time-of-use electricity rates actually help?</summary>
+          <div class="accordion-item__body">
+            <p>
+              Often, yes. Many utilities offer overnight off-peak rates that run 30% to 50%
+              below the standard rate. Since most home charging happens overnight anyway,
+              shifting or scheduling charging to that window can meaningfully lower your monthly
+              cost without changing anything else about your driving.
+            </p>
+          </div>
+        </details>
+
+        <details class="accordion-item">
+          <summary>Does battery size affect my charging cost?</summary>
+          <div class="accordion-item__body">
+            <p>
+              No. Your monthly cost depends on how far you drive and how efficiently your car
+              uses electricity, not the size of the battery. Battery size only affects how long
+              a full charge takes and how much range you have between charges.
+            </p>
+          </div>
+        </details>
+
+        <details class="accordion-item">
+          <summary>How accurate is this calculator?</summary>
+          <div class="accordion-item__body">
+            <p>
+              It's an estimate built from the inputs you provide. Your actual utility bill can
+              differ based on tiered pricing, time-of-use rates, seasonal adjustments, and any
+              fixed monthly charges your utility applies. Use it to compare scenarios, not as a
+              substitute for your bill.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="content-block related-tools wrap" aria-labelledby="related-heading">
+      <h2 id="related-heading">More calculators in this series</h2>
+      <div class="related-tools__grid">
+        <div class="related-tools__card related-tools__card--ghost">
+          <span class="related-tools__badge">Coming soon</span>
+          <h3>Solar Payback Calculator</h3>
+          <p>Estimate how long home solar panels take to pay for themselves.</p>
+        </div>
+        <div class="related-tools__card related-tools__card--ghost">
+          <span class="related-tools__badge">Coming soon</span>
+          <h3>Home Battery Storage ROI</h3>
+          <p>See whether a battery pays off given your utility's rate structure.</p>
+        </div>
+        <div class="related-tools__card related-tools__card--ghost">
+          <span class="related-tools__badge">Coming soon</span>
+          <h3>Heat Pump Savings Calculator</h3>
+          <p>Compare heat pump running costs against gas or electric resistance heat.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div data-include="/shared/footer.html"></div>
+
+  <script src="/shared/include.js"></script>
+  <script src="/shared/units.js"></script>
+  <script src="calculator.js"></script>
+</body>
+</html>

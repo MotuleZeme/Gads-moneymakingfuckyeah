@@ -1,0 +1,84 @@
+/*
+  Design tokens shared by every tool in this network.
+  Import this file first, before any page-specific stylesheet.
+  Do not redefine these values locally — extend with new tokens instead.
+*/
+
+:root {
+  /* ---- Color: surfaces (dark graphite, never pure black) ---- */
+  --color-bg: #15171a;
+  --color-bg-elevated: #1c1f23;
+  --color-bg-inset: #101214;
+  --color-border: #2b2f35;
+  --color-border-strong: #3a3f46;
+
+  /* ---- Color: text ---- */
+  --color-text-primary: #edeff1;
+  --color-text-secondary: #a2a8b0;
+  --color-text-tertiary: #6c7278;
+
+  /* ---- Color: accents ---- */
+  --color-amber: #f5a623;
+  --color-amber-soft: #f5a62326;
+  --color-amber-strong: #ffbf4d;
+  --color-blue: #6f9bd1;
+  --color-blue-soft: #6f9bd126;
+  --color-danger: #e0605a;
+  --color-success: #6fb582;
+
+  /* ---- Focus ring ---- */
+  --color-focus-ring: #f5a623;
+
+  /* ---- Type families ---- */
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+
+  /* ---- Type scale ---- */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: clamp(2.5rem, 5vw, 3.5rem);
+
+  --leading-tight: 1.15;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* ---- Radius (shape lock: inputs 8px, cards/panels 12px, pills/switches full) ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-full: 999px;
+
+  /* ---- Shadow (tinted to background hue, never pure black) ---- */
+  --shadow-panel: 0 1px 0 rgb(255 255 255 / 0.02) inset, 0 12px 32px rgb(0 0 0 / 0.28);
+
+  /* ---- Motion (MOTION_INTENSITY: 2 — fast, functional, no flourish) ---- */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+
+  /* ---- Layout ---- */
+  --content-max: 1180px;
+  --nav-height: 64px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+}

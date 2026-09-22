@@ -1,0 +1,424 @@
+/* Page-specific styles for the EV Home Charging Cost Calculator. */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------- Page intro ------------------------------- */
+
+.page-intro {
+  padding-block: var(--space-7) var(--space-6);
+}
+
+.page-intro h1 {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.01em;
+}
+
+.page-intro__sub {
+  margin-top: var(--space-3);
+  max-width: 62ch;
+  color: var(--color-text-secondary);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+}
+
+/* -------------------------------- Calculator -------------------------------- */
+
+.calculator {
+  padding-bottom: var(--space-8);
+}
+
+.calculator__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .calculator__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calc-inputs {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.calc-inputs__unit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.calc-inputs__unit-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.calc-inputs__group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.calc-inputs__group legend {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 0;
+  margin-bottom: var(--space-1);
+  text-transform: none;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field label {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.field__value-badge {
+  color: var(--color-amber);
+  font-size: var(--text-sm);
+}
+
+.field__input-row {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-inset);
+  overflow: hidden;
+}
+
+.field__input-row:focus-within {
+  border-color: var(--color-amber);
+}
+
+.field__input-row input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  padding: var(--space-3) var(--space-3);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.field__input-row input:focus {
+  outline: none;
+}
+
+.field__prefix,
+.field__suffix {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--space-3);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  background: var(--color-bg-elevated);
+}
+
+.field__prefix {
+  border-right: 1px solid var(--color-border);
+}
+
+.field__suffix {
+  border-left: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.field select {
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  width: 100%;
+}
+
+.field select:focus {
+  border-color: var(--color-amber);
+  outline: none;
+}
+
+/* Range slider */
+.field input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border-strong);
+}
+
+.field input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  cursor: pointer;
+  border: 2px solid var(--color-bg);
+}
+
+.field input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  cursor: pointer;
+  border: 2px solid var(--color-bg);
+}
+
+/* ---------------------------------- Meter ---------------------------------- */
+
+.meter {
+  padding: var(--space-5);
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-4));
+}
+
+@media (max-width: 900px) {
+  .meter {
+    position: static;
+  }
+}
+
+.meter__label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.meter__value {
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--color-amber);
+  line-height: 1;
+}
+
+.meter__currency {
+  font-size: 0.55em;
+  vertical-align: 0.15em;
+  color: var(--color-text-tertiary);
+}
+
+.meter__stats {
+  margin-top: var(--space-6);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-5);
+}
+
+.meter__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.meter__stat-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.meter__stat-value {
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.meter__stat-value--amber {
+  color: var(--color-amber);
+}
+
+.meter__compare {
+  margin-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-5);
+}
+
+.meter__compare-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.compare-bar {
+  margin-bottom: var(--space-4);
+}
+
+.compare-bar:last-child {
+  margin-bottom: 0;
+}
+
+.compare-bar__head {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-secondary);
+}
+
+.compare-bar__track {
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.compare-bar__fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--duration-base) var(--ease-standard);
+}
+
+.compare-bar__fill--amber {
+  background: var(--color-amber);
+}
+
+.compare-bar__fill--blue {
+  background: var(--color-blue);
+}
+
+/* ------------------------------- Content blocks ------------------------------- */
+
+.content-block {
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--color-border);
+}
+
+.content-block h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-4);
+}
+
+.content-block > p {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 68ch;
+  margin-bottom: var(--space-3);
+}
+
+.method-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 68ch;
+  padding-left: var(--space-5);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.method-list strong {
+  color: var(--color-text-primary);
+}
+
+.content-block--articles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-7);
+}
+
+@media (max-width: 800px) {
+  .content-block--articles {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}
+
+.article p,
+.article__list {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.article__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  list-style: none;
+  margin-top: var(--space-4);
+}
+
+.article__list strong {
+  color: var(--color-text-primary);
+}
+
+.article p {
+  margin-top: var(--space-3);
+}
+
+/* --------------------------------- Related --------------------------------- */
+
+.related-tools__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 800px) {
+  .related-tools__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.related-tools__card {
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.related-tools__card h3 {
+  font-size: var(--text-md);
+  color: var(--color-text-secondary);
+}
+
+.related-tools__card p {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  line-height: var(--leading-relaxed);
+}
+
+.related-tools__badge {
+  align-self: flex-start;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  padding: 2px var(--space-3);
+}
